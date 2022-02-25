@@ -13,25 +13,26 @@ const Search = () => {
   const [content, setContent] = useState([]);
   const [numOfPages, setNumOfPages] = useState();
 
-  const fetchSearch = async () => {
-    try {
-      const { data } = await axios.get(
-        `https://api.themoviedb.org/3/search/${type ? "tv" : "movie"}?api_key=${
-          process.env.REACT_APP_API_KEY
-        }&language=en-US&query=${searchText}&page=${page}&include_adult=false`
-      );
-      setContent(data.results);
-      setNumOfPages(data.total_pages);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     window.scroll(0, 0);
+    async function fetchSearch() {
+      try {
+        const { data } = await axios.get(
+          `https://api.themoviedb.org/3/search/${
+            type ? "tv" : "movie"
+          }?api_key=${
+            process.env.REACT_APP_API_KEY
+          }&language=en-US&query=${searchText}&page=${page}&include_adult=false`
+        );
+        setContent(data.results);
+        setNumOfPages(data.total_pages);
+      } catch (error) {
+        console.error(error);
+      }
+    }
     fetchSearch();
     // eslint-disable-next-line
-  }, [type, page]);
+  }, [type, page, searchText]);
 
   return (
     <div>
@@ -43,13 +44,6 @@ const Search = () => {
           variant="filled"
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <Button
-          onClick={fetchSearch}
-          variant="contained"
-          style={{ marginLeft: 10 }}
-        >
-          <SearchIcon fontSize="large" />
-        </Button>
       </div>
       <Tabs
         value={type}

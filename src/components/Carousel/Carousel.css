@@ -9,3 +9,7 @@
   margin-bottom: 5px;
   box-shadow: 0px 0px 5px black;
 }
+
+.carouselItem__txt {
+  color: #191919;
+}

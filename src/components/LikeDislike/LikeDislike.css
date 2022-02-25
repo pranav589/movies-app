@@ -1,0 +1,18 @@
+.movie-likes {
+  display: flex;
+  /* justify-content: space-between !important; */
+  align-items: center;
+}
+
+.likes,
+.disLikes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #191919;
+}
+
+.likes span,
+.disLikes span {
+  font-weight: 600;
+}

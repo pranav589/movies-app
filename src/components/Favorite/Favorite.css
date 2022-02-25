@@ -1,0 +1,10 @@
+.fav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fav span {
+  color: #191919;
+  font-weight: 400;
+}

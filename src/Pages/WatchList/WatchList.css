@@ -1,0 +1,24 @@
+.watchList {
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+  color: #191919;
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 1rem;
+}
+
+.watchList .watchList__potrait {
+  width: 150px;
+  margin-right: 1rem;
+}
+
+.watchList__detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.watchList__remove {
+  width: 100px;
+  margin-top: 1rem;
+}
