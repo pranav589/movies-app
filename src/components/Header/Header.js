@@ -37,7 +37,9 @@ const Header = () => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    const res = await axios.get("/api/users/logout");
+    const res = await axios.get(
+      "https://webapp-movie.herokuapp.com/api/users/logout"
+    );
     if (res.status === 200) {
       navigate("/");
       localStorage.removeItem("token");

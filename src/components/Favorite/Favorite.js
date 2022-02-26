@@ -33,7 +33,10 @@ function Favorite(props) {
 
     if (Favorited) {
       axios
-        .post("/api/favorite/removeFromFavorite", variables)
+        .post(
+          "https://webapp-movie.herokuapp.com/api/favorite/removeFromFavorite",
+          variables
+        )
         .then((response) => {
           if (response.data.success) {
             setFavoriteNumber(FavoriteNumber - 1);
@@ -44,34 +47,49 @@ function Favorite(props) {
           }
         });
     } else {
-      axios.post("/api/favorite/addToFavorite", variables).then((response) => {
-        if (response.data.success) {
-          setFavoriteNumber(FavoriteNumber + 1);
-          setFavorited(!Favorited);
-          toast.success("Added to watchlist!");
-        } else {
-          toast.error("Failed!");
-        }
-      });
+      axios
+        .post(
+          "https://webapp-movie.herokuapp.com/api/favorite/addToFavorite",
+          variables
+        )
+        .then((response) => {
+          if (response.data.success) {
+            setFavoriteNumber(FavoriteNumber + 1);
+            setFavorited(!Favorited);
+            toast.success("Added to watchlist!");
+          } else {
+            toast.error("Failed!");
+          }
+        });
     }
   };
 
   useEffect(() => {
-    axios.post("/api/favorite/favoriteNumber", variables).then((response) => {
-      if (response.data.success) {
-        setFavoriteNumber(response.data.favoriteNumber);
-      } else {
-        alert("Failed to get Favorite Number");
-      }
-    });
+    axios
+      .post(
+        "https://webapp-movie.herokuapp.com/api/favorite/favoriteNumber",
+        variables
+      )
+      .then((response) => {
+        if (response.data.success) {
+          setFavoriteNumber(response.data.favoriteNumber);
+        } else {
+          alert("Failed to get Favorite Number");
+        }
+      });
 
-    axios.post("/api/favorite/favorited", variables).then((response) => {
-      if (response.data.success) {
-        setFavorited(response.data.favorited);
-      } else {
-        alert("Failed to get Favorite Information");
-      }
-    });
+    axios
+      .post(
+        "https://webapp-movie.herokuapp.com/api/favorite/favorited",
+        variables
+      )
+      .then((response) => {
+        if (response.data.success) {
+          setFavorited(response.data.favorited);
+        } else {
+          alert("Failed to get Favorite Information");
+        }
+      });
   }, []);
 
   return (

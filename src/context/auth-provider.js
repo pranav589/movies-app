@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       try {
         if (token) {
           const verified = await axios.get(
-            "/api/users/auth",
+            "https://webapp-movie.herokuapp.com/api/users/auth",
             { cancelToken: source.token },
             {
               headers: { Authorization: token },

@@ -25,15 +25,20 @@ function Comments(props) {
       movieId: props.movieId,
     };
 
-    axios.post("/api/comment/saveComment", variables).then((res) => {
-      console.log(res.data);
-      if (res.data.success) {
-        setComment("");
-        props.refreshFunction(res.data.result);
-      } else {
-        toast.error("Failed to comment!");
-      }
-    });
+    axios
+      .post(
+        "https://webapp-movie.herokuapp.com/api/comment/saveComment",
+        variables
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.success) {
+          setComment("");
+          props.refreshFunction(res.data.result);
+        } else {
+          toast.error("Failed to comment!");
+        }
+      });
   };
   if (user) {
     return (

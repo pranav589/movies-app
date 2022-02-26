@@ -61,11 +61,14 @@ export default function Register() {
       return toast.error("Password and confirm password field does not match.");
     } else {
       try {
-        const res = await axios.post("/api/users/register", {
-          name,
-          email,
-          password,
-        });
+        const res = await axios.post(
+          "https://webapp-movie.herokuapp.com/api/users/register",
+          {
+            name,
+            email,
+            password,
+          }
+        );
 
         if (res.data.success) {
           toast.success("Account Registered!");

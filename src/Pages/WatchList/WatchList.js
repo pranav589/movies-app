@@ -31,9 +31,13 @@ function WatchList() {
     setLoading(true);
     try {
       axios
-        .post("/api/favorite/getFavoredMovie", variable, {
-          cancelToken: source.token,
-        })
+        .post(
+          "https://webapp-movie.herokuapp.com/api/favorite/getFavoredMovie",
+          variable,
+          {
+            cancelToken: source.token,
+          }
+        )
         .then((response) => {
           if (response.data.success) {
             console.log(response.data.favorites);
@@ -59,7 +63,10 @@ function WatchList() {
     };
 
     axios
-      .post("/api/favorite/removeFromFavorite", variables)
+      .post(
+        "https://webapp-movie.herokuapp.com/api/favorite/removeFromFavorite",
+        variables
+      )
       .then((response) => {
         if (response.data.success) {
           fetchFavoredMovie();

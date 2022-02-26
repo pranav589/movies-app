@@ -45,14 +45,19 @@ function MovieDetail() {
     fetchVideo();
     // eslint-disable-next-line
 
-    axios.post("/api/comment/getComments", movieVariable).then((response) => {
-      console.log(response);
-      if (response.data.success) {
-        setCommentLists(response.data.comments);
-      } else {
-        console.log("Failed to get comments Info");
-      }
-    });
+    axios
+      .post(
+        "https://webapp-movie.herokuapp.com/api/comment/getComments",
+        movieVariable
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data.success) {
+          setCommentLists(response.data.comments);
+        } else {
+          console.log("Failed to get comments Info");
+        }
+      });
   }, []);
 
   const updateComment = (newComment) => {

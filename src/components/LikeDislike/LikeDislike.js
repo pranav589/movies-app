@@ -26,61 +26,78 @@ function LikeDislike({ movie, commentId, movieId }) {
   }
 
   useEffect(() => {
-    axios.post("/api/like/getLikes", variables).then((res) => {
-      if (res.data.success) {
-        //number of likes
-        setLikes(res.data.likes.length);
-        //if i already liked
-        res.data.likes.map((like) => {
-          if (like.userId === userId) {
-            setIsLiked("liked");
-          }
-        });
-      } else {
-        toast.error("Failed to get likes.");
-      }
-    });
-    axios.post("/api/like/getDisLikes", variables).then((res) => {
-      if (res.data.success) {
-        //number of dislikes
-        setDisLikes(res.data.disLikes.length);
-        //if i already disliked
-        res.data.disLikes.map((disLike) => {
-          if (disLike.userId === userId) {
-            setIsDisLiked("disLiked");
-          }
-        });
-      } else {
-        toast.error("Failed to get disLikes.");
-      }
-    });
+    axios
+      .post("https://webapp-movie.herokuapp.com/api/like/getLikes", variables)
+      .then((res) => {
+        if (res.data.success) {
+          //number of likes
+          setLikes(res.data.likes.length);
+          //if i already liked
+          res.data.likes.map((like) => {
+            if (like.userId === userId) {
+              setIsLiked("liked");
+            }
+          });
+        } else {
+          toast.error("Failed to get likes.");
+        }
+      });
+    axios
+      .post(
+        "https://webapp-movie.herokuapp.com/api/like/getDisLikes",
+        variables
+      )
+      .then((res) => {
+        if (res.data.success) {
+          //number of dislikes
+          setDisLikes(res.data.disLikes.length);
+          //if i already disliked
+          res.data.disLikes.map((disLike) => {
+            if (disLike.userId === userId) {
+              setIsDisLiked("disLiked");
+            }
+          });
+        } else {
+          toast.error("Failed to get disLikes.");
+        }
+      });
   }, []);
 
   const handleLike = () => {
     if (user) {
       if (isLiked === null) {
-        axios.post("/api/like/increaseLike", variables).then((res) => {
-          if (res.data.success) {
-            setLikes(likes + 1);
-            setIsLiked("liked");
-            //if dislike button is already clicked
-            if (isDisLiked !== null) {
-              setIsDisLiked(null);
-              setDisLikes(disLikes - 1);
+        axios
+          .post(
+            "https://webapp-movie.herokuapp.com/api/like/increaseLike",
+            variables
+          )
+          .then((res) => {
+            if (res.data.success) {
+              setLikes(likes + 1);
+              setIsLiked("liked");
+              //if dislike button is already clicked
+              if (isDisLiked !== null) {
+                setIsDisLiked(null);
+                setDisLikes(disLikes - 1);
+              }
+            } else {
+              toast.error("Failed to make a like.");
             }
-          } else {
-            toast.error("Failed to make a like.");
-          }
-        });
+          });
       } else {
-        axios.post("/api/like/decreaseLike", variables).then((res) => {
-          if (res.data.success) {
-            setLikes(likes - 1);
-            setIsLiked(null);
-          } else {
-            toast.error("Failed to descrease like");
-          }
-        });
+        axios
+          .post(
+            "https://webapp-movie.herokuapp.com/api/like/decreaseLike",
+            variables
+          )
+          .then((res) => {
+            if (res.data.success) {
+              setLikes(likes - 1);
+              setIsLiked(null);
+            } else {
+              toast.error("Failed to descrease like");
+            }
+          });
       }
     } else {
       toast.error("Please login to give a like");
@@ -90,28 +107,38 @@ function LikeDislike({ movie, commentId, movieId }) {
   const handleDisLike = () => {
     if (user) {
       if (isDisLiked !== null) {
-        axios.post("/api/like/decreaseDisLike", variables).then((res) => {
-          if (res.data.success) {
-            setDisLikes(disLikes - 1);
-            setIsDisLiked(null);
-          } else {
-            toast.error("Failed to increase dislike");
-          }
-        });
-      } else {
-        axios.post("/api/like/increaseDisLike", variables).then((res) => {
-          if (res.data.success) {
-            setDisLikes(disLikes + 1);
-            setIsDisLiked("disLiked");
-            //if dislike button is already clicked
-            if (isLiked !== null) {
-              setIsLiked(null);
-              setLikes(likes - 1);
+        axios
+          .post(
+            "https://webapp-movie.herokuapp.com/api/like/decreaseDisLike",
+            variables
+          )
+          .then((res) => {
+            if (res.data.success) {
+              setDisLikes(disLikes - 1);
+              setIsDisLiked(null);
+            } else {
+              toast.error("Failed to increase dislike");
             }
-          } else {
-            toast.error("Failed to decrease dislike");
-          }
-        });
+          });
+      } else {
+        axios
+          .post(
+            "https://webapp-movie.herokuapp.com/api/like/increaseDisLike",
+            variables
+          )
+          .then((res) => {
+            if (res.data.success) {
+              setDisLikes(disLikes + 1);
+              setIsDisLiked("disLiked");
+              //if dislike button is already clicked
+              if (isLiked !== null) {
+                setIsLiked(null);
+                setLikes(likes - 1);
+              }
+            } else {
+              toast.error("Failed to decrease dislike");
+            }
+          });
       }
     } else {
       toast.error("Please login to give a dislike");
