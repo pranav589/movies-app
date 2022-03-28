@@ -10,12 +10,13 @@ import { AuthContext } from "../../context/auth-provider";
 import "./WatchList.css";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "../../components/Loader/Loader";
 
 function WatchList() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   let variable = { userFrom: localStorage.getItem("userId") };
   const CancelToken = axios.CancelToken;
   const source = CancelToken.source();
@@ -28,7 +29,7 @@ function WatchList() {
   }, []);
 
   const fetchFavoredMovie = () => {
-    setLoading(true);
+    setIsLoading(true);
     try {
       axios
         .post(
@@ -42,9 +43,10 @@ function WatchList() {
           if (response.data.success) {
             console.log(response.data.favorites);
             setFavorites(response.data.favorites);
-            setLoading(false);
+            setIsLoading(false);
           } else {
-            alert("Failed to get subscription videos");
+            toast.error("Failed to get watchlist");
+            setIsLoading(false);
           }
         });
     } catch (error) {
@@ -61,7 +63,7 @@ function WatchList() {
       movieId: movieId,
       userFrom: userFrom,
     };
-
+    setIsLoading(true);
     axios
       .post(
         "https://webapp-movie.herokuapp.com/api/favorite/removeFromFavorite",
@@ -71,8 +73,10 @@ function WatchList() {
         if (response.data.success) {
           fetchFavoredMovie();
           toast.success("Removed from watchlist!");
+          setIsLoading(false);
         } else {
           toast.error("Failed to remove from Watchlist");
+          setIsLoading(false);
         }
       });
   };
@@ -103,19 +107,45 @@ function WatchList() {
     </div>
   ));
 
+  if (isLoading) {
+    return (
+      <Loader
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+    );
+  }
+
+  if (favorites.length === 0) {
+    return (
+      <Typography
+        variant="h5"
+        mb={2}
+        mt={2}
+        style={{ color: "#191919", textAlign: "center" }}
+      >
+        Nothing in watch-list yet. May be add one?
+      </Typography>
+    );
+  }
+
   return (
     <>
+      <Typography
+        variant="h6"
+        mb={2}
+        mt={2}
+        style={{ color: "#191919", textAlign: "center" }}
+      >
+        Your Watchlist
+      </Typography>
+
       {user ? (
         <>
-          <Typography
-            variant="h6"
-            mb={2}
-            mt={2}
-            style={{ color: "#191919", textAlign: "center" }}
-          >
-            Your Watchlist
-          </Typography>
-
           <div className="videos__container">{renderList}</div>
         </>
       ) : (

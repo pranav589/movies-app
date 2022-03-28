@@ -14,10 +14,11 @@ import Carousel from "../../components/Carousel/Carousel";
 import LikeDislike from "../../components/LikeDislike/LikeDislike";
 import Favorite from "../../components/Favorite/Favorite";
 import Comments from "../../components/Comments/Comments";
+import Loader from "../../components/Loader/Loader";
 
 function MovieDetail() {
   const location = useLocation();
-  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [content, setContent] = useState();
   const [video, setVideo] = useState();
   const [commentLists, setCommentLists] = useState([]);
@@ -27,17 +28,21 @@ function MovieDetail() {
   };
 
   const fetchData = async () => {
+    setIsLoading(true);
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${location.state.media_type}/${location.state.id}?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     );
     setContent(data);
+    setIsLoading(false);
   };
 
   const fetchVideo = async () => {
+    setIsLoading(true);
     const { data } = await axios.get(
       `https://api.themoviedb.org/3/${location.state.media_type}/${location.state.id}/videos?api_key=${process.env.REACT_APP_API_KEY}&language=en-US`
     );
     setVideo(data.results[0]?.key);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -51,7 +56,6 @@ function MovieDetail() {
         movieVariable
       )
       .then((response) => {
-        console.log(response);
         if (response.data.success) {
           setCommentLists(response.data.comments);
         } else {
@@ -63,6 +67,19 @@ function MovieDetail() {
   const updateComment = (newComment) => {
     setCommentLists(commentLists.concat(newComment));
   };
+
+  if (isLoading) {
+    return (
+      <Loader
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+    );
+  }
 
   if (content) {
     return (

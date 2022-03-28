@@ -1,7 +1,7 @@
 import { img_300, unavailable } from "../../config/config";
 import "./SingleContent.css";
-import ContentModal from "../ContentModal/ContentModal";
-import { useNavigate, Link } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 
 const SingleContent = ({ id, poster, title, date, media_type }) => {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ const SingleContent = ({ id, poster, title, date, media_type }) => {
       state: { id, poster, title, date, media_type },
     });
   };
-  // console.log(navigate);
+
   return (
     <div className="singleContent" onClick={handleDetail}>
       <img
@@ -20,8 +20,8 @@ const SingleContent = ({ id, poster, title, date, media_type }) => {
       />
       <b className="title">{title}</b>
       <span className="subTitle">
-        {media_type === "tv" ? "TV Series" : "Movie"}
-        <span className="subTitle">{date}</span>
+        {media_type === "tv" ? "TV Series" : "Movie"} |
+        <span className="date">{date}</span>
       </span>
     </div>
   );

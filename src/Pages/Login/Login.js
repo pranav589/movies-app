@@ -16,6 +16,7 @@ import "./Login.css";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../context/auth-provider";
+import Loader from "../../components/Loader/Loader";
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -53,9 +54,11 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await axios.post(
         "https://webapp-movie.herokuapp.com/api/users/login",
@@ -69,12 +72,13 @@ export default function Login() {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("userId", res.data.userId);
         setUser(true);
-
+        setIsLoading(false);
         toast.success("Welcome!");
         navigate("/");
       }
     } catch (err) {
       toast.error(err.response.data.message);
+      setIsLoading(false);
     }
   };
 
@@ -83,6 +87,45 @@ export default function Login() {
       navigate("/");
     }
   }, [user]);
+
+  const handleGuestLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const res = await axios.post(
+        "https://webapp-movie.herokuapp.com/api/users/login",
+        {
+          email: "guest@gmail.com",
+          password: "password",
+        }
+      );
+
+      if (res.data.loginSuccess) {
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userId", res.data.userId);
+        setUser(true);
+        setIsLoading(false);
+        toast.success("Welcome Guest!");
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error(err.response.data.message);
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Loader
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+    );
+  }
 
   return (
     <Grid container component="main" className="login">
@@ -144,6 +187,16 @@ export default function Login() {
               </Grid>
             </Grid>
           </form>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+            onClick={handleGuestLogin}
+          >
+            Guest Login
+          </Button>
         </div>
       </Grid>
     </Grid>

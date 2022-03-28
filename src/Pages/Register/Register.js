@@ -15,6 +15,7 @@ import axios from "axios";
 import "../Login/Login.css";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loader from "../../components/Loader/Loader";
 
 const useStyles = makeStyles((theme) => ({
   image: {
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Register() {
   const classes = useStyles();
-  //   const { user, setUser } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -57,6 +58,7 @@ export default function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (password !== confirmPassword) {
       return toast.error("Password and confirm password field does not match.");
     } else {
@@ -71,14 +73,29 @@ export default function Register() {
         );
 
         if (res.data.success) {
-          toast.success("Account Registered!");
-          navigate("/");
+          toast.success("Account Registered! Login now!");
+          setIsLoading(false);
+          navigate("/login");
         }
       } catch (err) {
         toast.error(err.response.data.message);
+        setIsLoading(false);
       }
     }
   };
+
+  if (isLoading) {
+    return (
+      <Loader
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+    );
+  }
 
   return (
     <Grid container component="main" className="login">
@@ -93,6 +110,7 @@ export default function Register() {
           </Typography>
           <form className={classes.form} noValidate onSubmit={handleRegister}>
             <TextField
+              variant="outlined"
               margin="normal"
               required
               fullWidth
@@ -105,6 +123,7 @@ export default function Register() {
             />
 
             <TextField
+              variant="outlined"
               margin="normal"
               required
               fullWidth
@@ -117,6 +136,7 @@ export default function Register() {
             />
 
             <TextField
+              variant="outlined"
               margin="normal"
               required
               fullWidth
@@ -128,6 +148,7 @@ export default function Register() {
               onChange={(e) => setPassword(e.target.value)}
             />
             <TextField
+              variant="outlined"
               margin="normal"
               required
               fullWidth

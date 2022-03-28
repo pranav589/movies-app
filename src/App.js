@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header/Header";
-import SimpleBottomNavigation from "./components/MainNav";
+
 import Movies from "./Pages/Movies/Movies";
 import Series from "./Pages/Series/Series";
 import Trending from "./Pages/Trending/Trending";
@@ -15,11 +15,11 @@ import Register from "./Pages/Register/Register";
 import { useContext } from "react";
 import { AuthContext } from "./context/auth-provider";
 import WatchList from "./Pages/WatchList/WatchList";
+import PrivateRoute from "./PrivateRoute";
 
 function App() {
   const { user } = useContext(AuthContext);
   return (
-    // <BrowserRouter>
     <>
       <Header />
       <div className="app">
@@ -36,13 +36,18 @@ function App() {
             <Route path="/movies" element={<Movies />} />
             <Route path="/series" element={<Series />} />
             <Route path="/search" element={<Search />} />
-            <Route path="/watchlist" element={<WatchList />} />
+            <Route
+              path="/watchlist"
+              element={
+                <PrivateRoute>
+                  <WatchList />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </Container>
       </div>
       <ToastContainer />
-      {/* <SimpleBottomNavigation /> */}
-      {/* // </BrowserRouter> */}
     </>
   );
 }

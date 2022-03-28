@@ -5,6 +5,7 @@ import SingleContent from "../../components/SingleContent/SingleContent";
 import CustomPagination from "../../components/Pagination/CustomPagination";
 import { img_300, unavailable } from "../../config/config";
 import { Link } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 
 const Trending = () => {
   const [page, setPage] = useState(1);
@@ -20,7 +21,9 @@ const Trending = () => {
 
   useEffect(() => {
     window.scroll(0, 0);
+
     fetchTrending();
+
     // eslint-disable-next-line
   }, [page]);
 
